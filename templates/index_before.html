@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Gel Electrophoresis Imaging</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="{{url_for('static', filename='images/icons/favicon.icon')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}">
+        <!-- <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fonts/Linearicons-Free-v1.0.0/icon-font.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/animate/animate.css')}}">	
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/animsition/css/animsition.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/select2/select2.min.css')}}">	
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/daterangepicker/daterangepicker.css')}}"> -->
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/util.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
+            
+            
+        <style type="text/css">
+            #camContainer {
+              width: 600px;
+              height: 450px;
+            }
+            #picture_from_cam {
+                position: fixed;top: 0;right: 0;
+            }
+            #picture_from_cam img {
+                border: solid 1px #000;
+                width: 500px;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="limiter">
+            <div class="container-index">
+                <div class="wrap-index p-b-160 p-t-50">
+                    <form class="index-form">
+                        <span class="index-form-title p-b-43">
+                            Gel Electrophoresis Imaging
+                        </span>
+
+                        <div class="display">
+                            <div id="camContainer"></div>
+                        </div>
+
+                        <div class="container-index-form-btn">
+                            <button class="index-form-btn" onclick="upload_pic()">
+                            Upload
+                            </button>
+                            <button class="index-form-btn" onclick="take_snapshot()"; ondblclick="confirm_snapshot()">
+                            Take Snapshot
+                            </button>
+                            <button class="index-form-btn">
+                            Save
+                            </button>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="{{url_for('static', filename='webcam.min.js')}}"></script>
+        <script type="text/javascript">
+            Webcam.attach('#camContainer')
+
+            function take_snapshot() {
+                webcam.freeze();
+            }
+
+            function confirm_snapshot() {
+                webcam.snap(function(img_data_url) {
+                    document.getElementById('#picture_from_cam').innerHTML = '<img src="'+img_data_url+'"/>';
+                });
+            }
+
+            function cancel_snapshot() {
+                webcam.unfreeze()
+            }
+
+            function upload_image_file() {
+                webcam.reset()
+            }
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Gel Electrophoresis Imaging</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="{{url_for('static', filename='images/icons/favicon.icon')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/util.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
+    </head>
+
+    <body>
+        <div class="limiter">
+            <div class="container">
+                <div class="wrap p-b-40 p-t-40">
+                    <span class="index-form-title p-b-40">
+                        Gel Electrophoresis Imaging
+                    </span>
+                    <div class="container-index-form-btn">
+                    <a href="{{ url_for('upload') }}">
+                        <button class="index-form-btn">
+                        Upload
+                        </button>
+                    </a>
+                    <div class="index-form-btn-divider-v"></div>
+                    <a href="{{ url_for('timer') }}">
+                        <button class="index-form-btn">
+                        Electrophoresis
+                        </button>    
+                    </a>
+                    <div class="index-form-btn-divider-v"></div>
+                    <a href="{{ url_for('camera') }}">
+                        <button class="index-form-btn">
+                        Camera
+                        </button>
+                    </a>                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Gel - Electrophoresis</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='images/icons/favicon.icon')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/util.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/jquery-ui.css')}}">
+    <script src="{{url_for('static', filename='js/jquary.min.js')}}" type="text/javascript"></script>
+    <script src="{{url_for('static', filename='js/jquery-ui.min.js')}}" type="text/javascript"></script>
+    <style type="text/css">
+      #input[type='file']{
+        opacity:0
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="limiter-upload">
+      <div class="container-upload">
+      <div class="wrap">
+      <span class="index-form-title" style="margin-top: 30px;">
+        Gel Electrophoresis
+      </span>
+      <span class="index-form-title" id="timer-countdown" style="margin-top: 30px;">
+        60:00
+      </span>
+      
+      <!-- <p>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class=flashes>
+            {% for message in messages %}
+              <div>{{ message }}</div>
+            {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+    </p>
+    {% if filename %}
+        <div style="width:400px; height: 300px; margin: 0 auto; margin-top: 5px;">
+            <img src="{{ url_for('display_image', filename=filename) }}" style="width: 100%; height: 100%; object-fit:contain; ">
+        </div>
+    {% endif %} -->
+    </div>
+  </div>
+  </div>
+  <a href="{{ url_for('index') }}" class="index-form-btn" style="position:fixed; bottom: 30px; left: 40px;">
+    Back
+  </a>
+  
+  <!-- {% for pin in pins2 %}
+  {% if pins2[pin].state == true %}
+  <button class="index-form-btn" onclick="triggerGpioLow('{{pin}}'); startCountdown();">Start</button>
+  {% else %}
+  <button class="index-form-btn" onclick="triggerGpioHigh('{{pin}}'); cancelCountdown();">Reset</button>
+  {% endif %}
+  {% endfor %} -->
+  {% for pin in pins2 %}
+  <button class="index-form-btn" id="timer-button" style="position: fixed; bottom: 30px; left:290px;" onclick="triggerCountdownAndGpio('{{pin}}');">Start</button>
+  {% endfor %}
+  <!-- <form method="post" action="/upload/image" enctype="multipart/form-data">
+    <dl>
+        <label class="index-form-btn" style="position: fixed; bottom: 30px; left:290px;">
+          <input style="opacity:0;" type="file" name="file" onchange="this.form.submit()" autocomplete="off" required title=" ">
+          <span class="index-form-btn" style="position: fixed; bottom: 30px; left:290px;">Choose File</span>
+        </label>
+    </dl>
+  </form> -->
+  <a href="{{ url_for('camera') }}" class="index-form-btn" style="position:fixed; bottom: 30px; right: 40px;">
+    Camera
+  </a>
+
+  <script type="text/javascript">
+    var pins2 = {{pins2|tojson}};
+    var pin_arr = Object.keys(pins2);
+    var pin = pin_arr[0];
+    var isPinHigh;
+
+    // console.log(pins2[pin].state);
+
+    // if pin state is HIGH
+    if (pins2[pin].state) {
+      isPinHigh = true;
+      document.getElementById("timer-button").innerHTML = 'Reset';
+    }
+    else {
+      isPinHigh = false;
+      document.getElementById("timer-button").innerHTML = 'Start';
+    }
+    
+    var timer;
+    var isTimerStarted = false;
+
+    function triggerCountdownAndGpio(pin) {
+      if (isPinHigh) {
+        cancelCountdown();
+        triggerGpioLow(pin);
+        isPinHigh = false;
+      }
+      else {
+        startCountdown();
+        triggerGpioHigh(pin);
+        isPinHigh = true;
+      }
+    }
+
+    function startCountdown(pin) {
+      if (!isTimerStarted) {
+        timer = setInterval(countdown, 1000);
+        var count = 3600;
+        isTimerStarted = true;
+        document.getElementById("timer-button").innerHTML = 'Reset';
+
+        function countdown(pin) {
+          count = count - 1;
+          var minutes = Math.floor(count / 60);
+          var seconds = count - minutes * 60;
+          var minutes_string = minutes.toString(10);
+          var seconds_string = seconds.toString(10);
+          if (minutes<10){
+            minutes_string ="0"+minutes;
+          }
+          if (seconds<10){
+            seconds_string ="0"+seconds;
+          }
+          document.getElementById("timer-countdown").innerHTML = minutes_string + ":" + seconds_string;
+
+          if (count <= 0) {
+            clearInterval(timer);
+            // alert("timer reaches zero");
+            document.getElementById("timer-button").innerHTML = 'Start';
+            isTimerStarted = false;
+            triggerGpioLow(pin);
+          }
+        }
+      }
+    }
+
+    function cancelCountdown() {
+      clearInterval(timer);
+      isTimerStarted = false;
+      document.getElementById("timer-countdown").innerHTML = "60:00";
+      document.getElementById("timer-button").innerHTML = 'Start';
+    }
+
+    function triggerGpioHigh(pin) {
+      var route = pin.toString(10);
+      route = "/timer/" + route + "/on";
+      console.log(route);
+
+      var ajax = new XMLHttpRequest();
+      ajax.open('GET', route);
+      ajax.send(null);
+    }
+
+    function triggerGpioLow(pin) {
+      console.log(pin);
+      var route = pin.toString(10);
+      route = "/timer/" + route + "/off";
+      console.log(route);
+
+      var ajax = new XMLHttpRequest();
+      ajax.open('GET', route);
+      ajax.send(null);
+    }
+  </script>
+  </body>
+</html>
